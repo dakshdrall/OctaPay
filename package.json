@@ -1,0 +1,17 @@
+{
+  "name": "octapay",
+  "private": true,
+  "workspaces": [
+    "octapay/frontend",
+    "octapay/backend",
+    "octapay/contracts/lending_contract"
+  ],
+  "scripts": {
+    "dev:frontend": "npm --workspace octapay/frontend run dev",
+    "dev:backend": "npm --workspace octapay/backend run dev",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
