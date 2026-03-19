@@ -11,7 +11,7 @@ import PortfolioChart from '../components/PortfolioChart'
 
 export default function Dashboard() {
   const { user } = useAuth()
-  const { wallet, loading: walletLoading } = useWallet()
+  const { balance, loading: walletLoading } = useWallet()
   const { investments, loading: investLoading } = useInvestments()
   const { loans, loading: loansLoading } = useLoans()
   const { transactions, loading: txLoading } = useTransactions()
@@ -71,7 +71,7 @@ export default function Dashboard() {
                 <h2 className="text-sm font-semibold tracking-wide text-slate-200">Total balance</h2>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-4xl font-bold">
-                    {walletLoading ? '—' : wallet?.balance?.toFixed(2) ?? '0.00'}
+                    {walletLoading ? '—' : balance?.toFixed(2) ?? '0.00'}
                   </span>
                   <span className="text-sm text-slate-300">USDC</span>
                 </div>
@@ -135,7 +135,7 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-6">
-            <WalletCard balance={wallet?.balance ?? 0} />
+            <WalletCard balance={balance ?? 0} />
             <LoanCard loan={loans[0] ?? { collateral: 0, borrowed: 0, repaid: 0, healthFactor: 0 }} />
           </div>
         </section>

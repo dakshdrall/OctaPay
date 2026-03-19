@@ -6,7 +6,7 @@ import LoanCard from '../components/LoanCard'
 
 export default function Borrow() {
   const { authFetch } = useAuth()
-  const { wallet, loading: walletLoading, refresh: refreshWallet } = useWallet()
+  const { balance, loading: walletLoading, refresh: refreshWallet } = useWallet()
   const { loans, loading: loansLoading, refresh: refreshLoans } = useLoans()
 
   const [collateral, setCollateral] = useState('')
@@ -16,7 +16,7 @@ export default function Borrow() {
   const [repayAmount, setRepayAmount] = useState('')
   const [successMessage, setSuccessMessage] = useState(null)
 
-  const availableBalance = wallet?.balance ?? 0
+  const availableBalance = balance ?? 0
   const collateralNumber = Number(collateral)
   const maxBorrow = useMemo(() => {
     if (!collateralNumber || collateralNumber <= 0) return 0

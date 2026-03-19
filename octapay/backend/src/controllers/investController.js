@@ -1,4 +1,5 @@
 import prisma from '../prisma/client.js'
+import { getBalance } from '../stellar/wallet.js'
 
 export const listInvestments = async (req, res, next) => {
   try {
@@ -25,7 +26,10 @@ export const createInvestment = async (req, res, next) => {
       return res.status(400).json({ error: 'Wallet not found' })
     }
 
-    if (wallet.balance < amt) {
+    const onChain = await getBalance(wallet.stellarPublicKey)
+    const onChainBalance = onChain.balance ?? 0
+
+    if (onChainBalance < amt) {
       return res.status(400).json({ error: 'Insufficient balance' })
     }
 

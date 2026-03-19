@@ -16,12 +16,12 @@ function generateCard() {
 }
 
 export default function Spend() {
-  const { wallet, loading: walletLoading } = useWallet()
+  const { balance, loading: walletLoading } = useWallet()
   const { transactions, loading: txLoading } = useTransactions()
   const [cardInfo, setCardInfo] = useState(generateCard())
   const [active, setActive] = useState(false)
 
-  const spendable = wallet?.balance ?? 0
+  const spendable = balance ?? 0
 
   const cardTransactions = useMemo(
     () => transactions.filter((tx) => tx.type === 'spend' || tx.type === 'card'),
