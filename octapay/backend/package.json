@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "nodemon --watch src --exec node src/server.js",
     "start": "node src/server.js",
-    "migrate": "prisma migrate dev --name init",
-    "generate": "prisma generate"
+    "migrate": "prisma migrate dev --schema=src/prisma/schema.prisma --name init",
+    "generate": "prisma generate --schema=src/prisma/schema.prisma"
   },
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "^5.22.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

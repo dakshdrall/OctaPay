@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 
 export default function useTransactions() {
@@ -6,22 +6,23 @@ export default function useTransactions() {
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const res = await authFetch('/api/transactions')
-        if (!res.ok) throw new Error('Failed to fetch transactions')
-        const data = await res.json()
-        setTransactions(data.transactions ?? [])
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+  const fetchTransactions = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await authFetch('/api/transactions')
+      if (!res.ok) throw new Error('Failed to fetch transactions')
+      const data = await res.json()
+      setTransactions(data.transactions ?? [])
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
     }
-
-    fetchTransactions()
   }, [authFetch])
 
-  return { transactions, loading }
+  useEffect(() => {
+    fetchTransactions()
+  }, [fetchTransactions])
+
+  return { transactions, loading, refresh: fetchTransactions }
 }
