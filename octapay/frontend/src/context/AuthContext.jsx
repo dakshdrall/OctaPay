@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
+const API_BASE = import.meta.env.VITE_API_URL || ''
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -15,6 +16,37 @@ export function AuthProvider({ children }) {
     setLoading(false)
   }, [])
 
+  useEffect(() => {
+    if (!token) {
+      setUser(null)
+      return
+    }
+
+    const fetchMe = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        if (!res.ok) {
+          throw new Error('Unauthorized')
+        }
+        const data = await res.json()
+        setUser(data.user)
+      } catch (err) {
+        setUser(null)
+        localStorage.removeItem('octapay_token')
+        setToken(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMe()
+  }, [token])
+
   const login = (token, user) => {
     localStorage.setItem('octapay_token', token)
     setToken(token)
@@ -27,8 +59,20 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
+  const authFetch = async (path, options = {}) => {
+    const res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : undefined,
+        ...(options.headers ?? {}),
+      },
+    })
+    return res
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, authFetch }}>
       {children}
     </AuthContext.Provider>
   )
