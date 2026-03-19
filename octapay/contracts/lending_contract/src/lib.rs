@@ -1,7 +1,8 @@
 #![no_std]
 
-use soroban_sdk::{contractimpl, symbol, Address, Env, Map, Symbol};
+use soroban_sdk::{contractimpl, contracttype, symbol, Address, Env, Map, Symbol};
 
+#[contracttype]
 #[derive(Clone)]
 pub struct LoanStatus {
     pub collateral: i128,
@@ -43,21 +44,27 @@ impl LendingContract {
     }
 
     fn compute_health_factor(collateral: i128, borrowed: i128, repaid: i128) -> i128 {
-        if borrowed == 0 {
+        if borrowed <= 0 {
             return i128::MAX;
         }
-        // Simple health factor: (collateral * 100) / (borrowed - repaid)
+
         let outstanding = borrowed.saturating_sub(repaid);
         if outstanding <= 0 {
             return i128::MAX;
         }
-        (collateral * 100) / outstanding
+
+        // Health factor scaled by 100 (e.g. 100 = 1.0)
+        (collateral.saturating_mul(100)) / outstanding
     }
 }
 
 #[contractimpl]
 impl LendingContract {
     pub fn deposit_collateral(env: Env, user: Address, amount: i128) {
+        if amount <= 0 {
+            env.panic("Amount must be positive")
+        }
+
         let (collateral, borrowed, repaid) = Self::get_loan(&env, &user);
         let new_collateral = collateral.saturating_add(amount);
         Self::set_loan(&env, &user, new_collateral, borrowed, repaid);
@@ -66,24 +73,37 @@ impl LendingContract {
     pub fn get_borrow_limit(env: Env, user: Address) -> i128 {
         let (collateral, _, _) = Self::get_loan(&env, &user);
         // 60% of collateral
-        (collateral * 60) / 100
+        (collateral.saturating_mul(60)) / 100
     }
 
     pub fn borrow(env: Env, user: Address, amount: i128) {
+        if amount <= 0 {
+            env.panic("Amount must be positive")
+        }
+
         let (collateral, borrowed, repaid) = Self::get_loan(&env, &user);
-        let max = (collateral * 60) / 100;
+        let max = (collateral.saturating_mul(60)) / 100;
         let outstanding = borrowed.saturating_sub(repaid);
         let available = max.saturating_sub(outstanding);
+
         if amount > available {
             env.panic("Borrow amount exceeds limit")
         }
+
         let new_borrowed = borrowed.saturating_add(amount);
         Self::set_loan(&env, &user, collateral, new_borrowed, repaid);
     }
 
     pub fn repay(env: Env, user: Address, amount: i128) {
+        if amount <= 0 {
+            env.panic("Amount must be positive")
+        }
+
         let (collateral, borrowed, repaid) = Self::get_loan(&env, &user);
-        let new_repaid = repaid.saturating_add(amount);
+        let outstanding = borrowed.saturating_sub(repaid);
+        let repay_amount = if amount > outstanding { outstanding } else { amount };
+
+        let new_repaid = repaid.saturating_add(repay_amount);
         Self::set_loan(&env, &user, collateral, borrowed, new_repaid);
     }
 
@@ -101,9 +121,12 @@ impl LendingContract {
     pub fn liquidate(env: Env, user: Address) {
         let (collateral, borrowed, repaid) = Self::get_loan(&env, &user);
         let health_factor = Self::compute_health_factor(collateral, borrowed, repaid);
+
+        // Health factor is scaled by 100; < 100 means < 1.0
         if health_factor >= 100 {
             env.panic("Loan is healthy")
         }
+
         // Simple liquidation: wipe loan and collateral
         Self::set_loan(&env, &user, 0, 0, 0);
     }
