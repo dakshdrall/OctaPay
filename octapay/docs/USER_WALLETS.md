@@ -1,11 +1,21 @@
-# Testnet User Wallets
+# User Wallets (Testnet)
 
-This file tracks testnet wallets created for OctaPay testing.
+This document stores test Stellar wallet addresses that can be verified via Stellar Explorer.
 
-## Example Wallets
+| User | Stellar Public Key | Status | Notes |
+|------|--------------------|--------|-------|
+| User 1 | `G...` | Funded / Pending | e.g., 50 USDC plus base XLM |
+| User 2 | `G...` | Funded / Pending |  |
+| User 3 | `G...` | Funded / Pending |  |
+| User 4 | `G...` | Funded / Pending |  |
+| User 5 | `G...` | Funded / Pending |  |
 
-| Name | Public Key | Secret (secure storage) | Notes |
-|------|------------|-------------------------|-------|
-| Test User 1 | -- | -- | created via backend friendbot funding |
+## Usage
+1. Open [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet).
+2. Paste the public key to verify on-chain balances and transactions.
+3. Confirm USDC trustline and transfer events.
 
-> **Note:** Do NOT commit real secrets. Store secrets in an encrypted vault or environment variables.
+## Notes
+- Keep secret keys private (not committed to source).
+- For automated tests, populate via backend `friendbot` or a secured script.
+
