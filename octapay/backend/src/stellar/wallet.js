@@ -1,104 +1,47 @@
-import { Asset, Keypair, Memo, Networks, Operation, Server, TransactionBuilder } from 'stellar-sdk'
-import { fundTestnetAccount } from './friendbot.js'
+import StellarSdk from 'stellar-sdk';
+const { Keypair, Networks, Asset, Operation, TransactionBuilder, Memo } = StellarSdk;
 
-const server = new Server('https://horizon-testnet.stellar.org')
+const STELLAR_NETWORK = process.env.STELLAR_NETWORK || 'testnet';
+const HORIZON_URL = 'https://horizon-testnet.stellar.org';
+const server = new StellarSdk.Horizon.Server(HORIZON_URL);
 
-const getUsdcAsset = () => {
-  const issuer = process.env.STELLAR_USDC_ISSUER
-  if (!issuer) {
-    throw new Error('Missing STELLAR_USDC_ISSUER environment variable')
-  }
-  return new Asset('USDC', issuer)
-}
+export const createWallet = () => {
+  const keypair = Keypair.random();
+  return {
+    publicKey: keypair.publicKey(),
+    secretKey: keypair.secret()
+  };
+};
 
-export const createStellarWallet = async ({ initialUsdc = 0 } = {}) => {
-  const keypair = Keypair.random()
-  const publicKey = keypair.publicKey()
-  const secret = keypair.secret()
-
-  // Fund account with XLM so it can create trustlines and pay fees.
-  await fundTestnetAccount(publicKey)
-
-  // Ensure the account trusts USDC asset
-  const asset = getUsdcAsset()
-  const account = await server.loadAccount(publicKey)
-
-  const trustTx = new TransactionBuilder(account, {
-    fee: await server.fetchBaseFee(),
-    networkPassphrase: Networks.TESTNET,
-  })
-    .addOperation(
-      Operation.changeTrust({
-        asset,
-        limit: '1000000000',
-      })
-    )
-    .setTimeout(30)
-    .build()
-
-  trustTx.sign(keypair)
-  await server.submitTransaction(trustTx)
-
-  // If an initial USDC amount is requested, attempt to send from distribution account.
-  if (initialUsdc > 0 && process.env.STELLAR_USDC_DISTRIBUTION_SECRET) {
-    const distributionSecret = process.env.STELLAR_USDC_DISTRIBUTION_SECRET
-    const distributionKeypair = Keypair.fromSecret(distributionSecret)
-    const distributionAccount = await server.loadAccount(distributionKeypair.publicKey())
-
-    const paymentTx = new TransactionBuilder(distributionAccount, {
-      fee: await server.fetchBaseFee(),
-      networkPassphrase: Networks.TESTNET,
-    })
-      .addOperation(
-        Operation.payment({
-          destination: publicKey,
-          asset,
-          amount: initialUsdc.toString(),
-        })
-      )
-      .setTimeout(30)
-      .build()
-
-    paymentTx.sign(distributionKeypair)
-    await server.submitTransaction(paymentTx)
-  }
-
-  return { publicKey, secret }
-}
+export const fundWallet = async (publicKey) => {
+  const response = await fetch(`https://friendbot.stellar.org?addr=${publicKey}`);
+  return response.json();
+};
 
 export const getBalance = async (publicKey) => {
-  const account = await server.loadAccount(publicKey)
-  const asset = getUsdcAsset()
-
-  const balanceEntry = account.balances.find((b) => {
-    return b.asset_code === 'USDC' && b.asset_issuer === asset.issuer
-  })
-
-  return {
-    balance: balanceEntry ? Number(balanceEntry.balance) : 0,
-    balances: account.balances,
+  try {
+    const account = await server.loadAccount(publicKey);
+    const xlmBalance = account.balances.find(b => b.asset_type === 'native');
+    return { xlm: xlmBalance ? xlmBalance.balance : '0', balances: account.balances };
+  } catch (e) {
+    return { xlm: '0', balances: [] };
   }
-}
+};
 
-export const sendUSDC = async ({ sourceSecret, destinationPublic, amount }) => {
-  const sourceKeypair = Keypair.fromSecret(sourceSecret)
-  const sourceAccount = await server.loadAccount(sourceKeypair.publicKey())
-  const asset = getUsdcAsset()
-
-  const tx = new TransactionBuilder(sourceAccount, {
+export const sendPayment = async (fromSecret, toPublic, amount, asset = 'XLM') => {
+  const fromKeypair = Keypair.fromSecret(fromSecret);
+  const account = await server.loadAccount(fromKeypair.publicKey());
+  const transaction = new TransactionBuilder(account, {
     fee: await server.fetchBaseFee(),
-    networkPassphrase: Networks.TESTNET,
+    networkPassphrase: Networks.TESTNET
   })
-    .addOperation(
-      Operation.payment({
-        destination: destinationPublic,
-        asset,
-        amount: amount.toString(),
-      })
-    )
+    .addOperation(Operation.payment({
+      destination: toPublic,
+      asset: StellarSdk.Asset.native(),
+      amount: String(amount)
+    }))
     .setTimeout(30)
-    .build()
-
-  tx.sign(sourceKeypair)
-  return server.submitTransaction(tx)
-}
+    .build();
+  transaction.sign(fromKeypair);
+  return server.submitTransaction(transaction);
+};
