@@ -8,6 +8,7 @@ import Invest from './pages/Invest'
 import Borrow from './pages/Borrow'
 import Spend from './pages/Spend'
 import Profile from './pages/Profile'
+import Transactions from './pages/Transactions'
 
 function RequireAuth({ children }) {
   const { user, loading } = useAuth()
@@ -85,6 +86,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <Profile />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <RequireAuth>
+                <Transactions />
               </RequireAuth>
             }
           />

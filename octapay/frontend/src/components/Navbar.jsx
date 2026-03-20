@@ -6,6 +6,8 @@ const navItems = [
   { label: 'Invest', href: '/invest' },
   { label: 'Borrow', href: '/borrow' },
   { label: 'Spend', href: '/spend' },
+  { label: 'Transactions', href: '/transactions' },
+  { label: 'Profile', href: '/profile' },
 ]
 
 export default function Navbar() {
