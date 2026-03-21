@@ -1,5 +1,5 @@
-import StellarSdk from 'stellar-sdk';
-const { Keypair, Networks, Asset, Operation, TransactionBuilder, Memo } = StellarSdk;
+import pkg from 'stellar-sdk';
+const { Keypair, Server, Networks, Asset, TransactionBuilder, Operation, BASE_FEE } = pkg;
 
 const STELLAR_NETWORK = process.env.STELLAR_NETWORK || 'testnet';
 const HORIZON_URL = 'https://horizon-testnet.stellar.org';
