@@ -3,7 +3,7 @@ const { Keypair, Server, Networks, Asset, TransactionBuilder, Operation, BASE_FE
 
 const STELLAR_NETWORK = process.env.STELLAR_NETWORK || 'testnet';
 const HORIZON_URL = 'https://horizon-testnet.stellar.org';
-const server = new StellarSdk.Horizon.Server(HORIZON_URL);
+const server = new Server(HORIZON_URL);
 
 export const createWallet = () => {
   const keypair = Keypair.random();
@@ -37,7 +37,7 @@ export const sendPayment = async (fromSecret, toPublic, amount, asset = 'XLM') =
   })
     .addOperation(Operation.payment({
       destination: toPublic,
-      asset: StellarSdk.Asset.native(),
+      asset: Asset.native(),
       amount: String(amount)
     }))
     .setTimeout(30)
