@@ -1,7 +1,7 @@
 import pkg from 'stellar-sdk';
-const { Server, Networks, Asset, TransactionBuilder, Operation, BASE_FEE, Keypair } = pkg;
+const { Horizon, Networks, Asset, TransactionBuilder, Operation, BASE_FEE, Keypair } = pkg;
 
-const server = new Server('https://horizon-testnet.stellar.org')
+const server = new Horizon.Server('https://horizon-testnet.stellar.org')
 
 const getUsdcAsset = () => {
   const issuer = process.env.STELLAR_USDC_ISSUER
