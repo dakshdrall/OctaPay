@@ -1,5 +1,5 @@
 import prisma from '../prisma/client.js'
-import { createStellarWallet, getBalance } from '../stellar/wallet.js'
+import { createWallet, getBalance, fundWallet } from '../stellar/wallet.js'
 import { getAccountTransactions, sendUSDC } from '../stellar/transactions.js'
 import { encryptText, decryptText } from '../utils/crypto.js'
 
@@ -30,7 +30,7 @@ export const createWallet = async (req, res, next) => {
       return res.status(200).json({ wallet: existing })
     }
 
-    const { publicKey, secret } = await createStellarWallet({ initialUsdc: 50 })
+    const { publicKey, secret } = await createWallet({ initialUsdc: 50 })
     const encryptedSecret = encryptText(secret)
 
     const wallet = await prisma.wallet.create({

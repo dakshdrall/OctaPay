@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import prisma from '../prisma/client.js'
-import { createStellarWallet } from '../stellar/wallet.js'
+import { createWallet } from '../stellar/wallet.js'
 import { fundTestnetAccount } from '../stellar/friendbot.js'
 import { encryptText } from '../utils/crypto.js'
 
@@ -43,7 +43,7 @@ export const register = async (req, res, next) => {
         },
       })
 
-      const { publicKey, secret } = createStellarWallet()
+      const { publicKey, secret } = createWallet()
       await fundTestnetAccount(publicKey)
 
       const encryptedSecret = encryptText(secret)
