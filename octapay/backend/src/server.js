@@ -29,6 +29,8 @@ app.use('/api/transactions', transactionRoutes)
 
 app.use(errorHandler)
 
+app.get('/health', (req, res) => res.json({ status: 'ok', network: process.env.STELLAR_NETWORK }));
+
 app.listen(PORT, () => {
   console.log(`OctaPay backend listening on http://localhost:${PORT}`)
 })
