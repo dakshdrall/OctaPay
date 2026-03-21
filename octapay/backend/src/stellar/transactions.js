@@ -1,4 +1,5 @@
-import { Asset, Keypair, Networks, Operation, Server, TransactionBuilder } from 'stellar-sdk'
+import pkg from 'stellar-sdk';
+const { Server, Networks, Asset, TransactionBuilder, Operation, BASE_FEE, Keypair } = pkg;
 
 const server = new Server('https://horizon-testnet.stellar.org')
 
