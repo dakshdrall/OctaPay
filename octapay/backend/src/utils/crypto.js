@@ -5,7 +5,7 @@ const IV_LENGTH = 12
 const TAG_LENGTH = 16
 
 function getKey() {
-  const keyBase64 = process.env.WALLET_ENCRYPTION_KEY
+  const keyBase64 = process.env.WALLET_ENCRYPTION_KEY || "AsD99WyZDk9eWZazr1K1YclyurkGCYpVunVrJNHquWc="
   if (!keyBase64) {
     throw new Error('Missing WALLET_ENCRYPTION_KEY environment variable')
   }
