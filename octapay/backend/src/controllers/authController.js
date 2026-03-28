@@ -43,7 +43,7 @@ export const register = async (req, res, next) => {
         },
       })
 
-      const { publicKey, secret } = createWallet()
+      const { publicKey, secret } = await createWallet()
       await fundTestnetAccount(publicKey)
 
       const encryptedSecret = encryptText(secret)
