@@ -43,10 +43,10 @@ export const register = async (req, res, next) => {
         },
       })
 
-      const { publicKey, secret } = await createWallet()
+      const { publicKey, secretKey } = await createWallet()
       await fundTestnetAccount(publicKey)
 
-      const encryptedSecret = encryptText(secret)
+      const encryptedSecret = encryptText(secretKey)
       await tx.wallet.create({
         data: {
           userId: user.id,
