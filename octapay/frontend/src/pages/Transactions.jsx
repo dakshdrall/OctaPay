@@ -58,118 +58,315 @@ export default function Transactions() {
     })
   }, [transactions, selectedType, search])
 
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      backgroundColor: 'var(--surface)',
+      padding: 'var(--spacing-3xl) var(--spacing-2xl)',
+    },
+    header: {
+      marginBottom: 'var(--spacing-2xl)',
+      animation: 'fadeInUp 600ms ease-out',
+    },
+    title: {
+      fontSize: '2.5rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 700,
+      color: 'var(--text)',
+      marginBottom: 'var(--spacing-sm)',
+      letterSpacing: '-0.02em',
+    },
+    subtitle: {
+      fontSize: '1rem',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-mono)',
+    },
+    controls: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: 'var(--spacing-lg)',
+      marginBottom: 'var(--spacing-xl)',
+      animation: 'fadeInUp 600ms ease-out 100ms forwards',
+      opacity: 0,
+    },
+    controlGroup: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'var(--spacing-sm)',
+    },
+    label: {
+      fontSize: '0.75rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      color: 'var(--text-muted)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+    },
+    select: {
+      backgroundColor: 'var(--surface-2)',
+      color: 'var(--text)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-md)',
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      fontFamily: 'var(--font-mono)',
+      fontSize: '0.9375rem',
+      transition: 'all 300ms ease-out',
+      outline: 'none',
+    },
+    input: {
+      backgroundColor: 'var(--surface-2)',
+      color: 'var(--text)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-md)',
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      fontFamily: 'var(--font-mono)',
+      fontSize: '0.9375rem',
+      transition: 'all 300ms ease-out',
+      outline: 'none',
+    },
+    refreshButton: {
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      backgroundColor: 'var(--cta)',
+      color: 'var(--surface)',
+      border: 'none',
+      borderRadius: 'var(--radius-md)',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      fontSize: '0.9375rem',
+      cursor: 'pointer',
+      transition: 'all 300ms ease-out',
+      alignSelf: 'flex-end',
+      marginTop: 'auto',
+    },
+    errorBox: {
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      backgroundColor: 'rgba(255, 0, 0, 0.1)',
+      border: '1px solid rgba(255, 0, 0, 0.2)',
+      borderRadius: 'var(--radius-md)',
+      color: 'var(--danger)',
+      fontSize: '0.875rem',
+      fontFamily: 'var(--font-mono)',
+      marginBottom: 'var(--spacing-xl)',
+      animation: 'fadeInUp 300ms ease-out',
+    },
+    tableWrapper: {
+      backgroundColor: 'var(--surface-2)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-lg)',
+      overflow: 'hidden',
+      animation: 'fadeInUp 600ms ease-out 200ms forwards',
+      opacity: 0,
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      fontSize: '0.875rem',
+    },
+    thead: {
+      backgroundColor: 'rgba(0, 255, 255, 0.05)',
+      borderBottom: '2px solid hsl(220, 12%, 25%)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 10,
+    },
+    th: {
+      padding: 'var(--spacing-lg)',
+      textAlign: 'left',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      color: 'var(--accent)',
+      fontSize: '0.75rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.1em',
+      whiteSpace: 'nowrap',
+    },
+    tbody: {
+    },
+    tr: {
+      borderBottom: '1px solid hsl(220, 12%, 20%)',
+      transition: 'background-color 300ms ease-out',
+    },
+    td: {
+      padding: 'var(--spacing-lg)',
+      color: 'var(--text)',
+      fontFamily: 'var(--font-mono)',
+      fontSize: '0.8125rem',
+    },
+    stateMessage: {
+      padding: 'var(--spacing-2xl)',
+      textAlign: 'center',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-mono)',
+    },
+    footer: {
+      marginTop: 'var(--spacing-xl)',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 'var(--spacing-lg)',
+      fontSize: '0.875rem',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-mono)',
+    },
+    pagination: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--spacing-md)',
+    },
+    paginationButton: (disabled) => ({
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      backgroundColor: 'var(--surface-2)',
+      color: disabled ? 'var(--text-muted)' : 'var(--text)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-md)',
+      fontFamily: 'var(--font-mono)',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      transition: 'all 300ms ease-out',
+      opacity: disabled ? 0.5 : 1,
+      fontSize: '0.875rem',
+    }),
+    '@media (max-width: 640px)': {
+      container: {
+        padding: 'var(--spacing-xl) var(--spacing-lg)',
+      },
+      title: {
+        fontSize: '1.75rem',
+      },
+      controls: {
+        gridTemplateColumns: '1fr',
+      },
+      table: {
+        fontSize: '0.75rem',
+      },
+      th: {
+        padding: 'var(--spacing-md)',
+      },
+      td: {
+        padding: 'var(--spacing-md)',
+      },
+    },
+  }
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold">Transaction History</h1>
-            <p className="mt-1 text-slate-400">All your account events in one place with filter and paging.</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => fetchTransactions(1)}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-            >
-              Refresh
-            </button>
-          </div>
-        </header>
+    <main style={styles.container}>
+      <header style={styles.header}>
+        <h1 style={styles.title}>Transaction History</h1>
+        <p style={styles.subtitle}>All your account events in one place with filtering and pagination</p>
+      </header>
 
-        <section className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/70 p-4">
-          <label className="flex flex-col text-sm">
-            <span className="mb-1 text-slate-300">Type</span>
-            <select
-              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              {TYPE_OPTIONS.map((type) => (
-                <option key={type} value={type}>
-                  {typeLabel(type)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col text-sm flex-1 min-w-[180px]">
-            <span className="mb-1 text-slate-300">Search</span>
-            <input
-              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Type/txHash/amount"
-            />
-          </label>
-          <label className="flex flex-col text-sm">
-            <span className="mb-1 text-slate-300">Per page</span>
-            <select
-              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white"
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-            >
-              {[10, 20, 30, 50].map((v) => (
-                <option key={v} value={v}>{v}</option>
-              ))}
-            </select>
-          </label>
-        </section>
-
-        {error && (
-          <div className="mb-4 rounded-lg bg-rose-500/20 px-4 py-3 text-sm text-rose-200">{error}</div>
-        )}
-
-        <div className="overflow-x-auto rounded-xl bg-slate-900/70">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-white/10 text-slate-400">
-              <tr>
-                <th className="py-3 px-3">Type</th>
-                <th className="py-3 px-3">Amount</th>
-                <th className="py-3 px-3">Status</th>
-                <th className="py-3 px-3">Currency</th>
-                <th className="py-3 px-3">Tx Hash</th>
-                <th className="py-3 px-3">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="py-6 text-center text-slate-400">
-                    Loading transactions...
-                  </td>
-                </tr>
-              ) : filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-6 text-center text-slate-400">
-                    No transactions found.
-                  </td>
-                </tr>
-              ) : (
-                filtered.map((tx) => <TransactionRow key={tx.id} transaction={tx} />)
-              )}
-            </tbody>
-          </table>
+      <div style={styles.controls}>
+        <div style={styles.controlGroup}>
+          <label style={styles.label}>Type</label>
+          <select
+            style={styles.select}
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
+            {TYPE_OPTIONS.map((type) => (
+              <option key={type} value={type}>
+                {typeLabel(type)}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="mt-4 flex items-center justify-between text-sm text-slate-300">
-          <span>
-            Showing {filtered.length} of {total} transactions (page {page} of {pages})
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-              disabled={page <= 1}
-              className="rounded-lg border border-slate-700 px-3 py-1 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Prev
-            </button>
-            <button
-              onClick={() => setPage((prev) => Math.min(pages, prev + 1))}
-              disabled={page >= pages}
-              className="rounded-lg border border-slate-700 px-3 py-1 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Next
-            </button>
-          </div>
+        <div style={styles.controlGroup}>
+          <label style={styles.label}>Search</label>
+          <input
+            style={styles.input}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Type, hash, or amount"
+          />
+        </div>
+
+        <div style={styles.controlGroup}>
+          <label style={styles.label}>Per Page</label>
+          <select
+            style={styles.select}
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value))}
+          >
+            {[10, 20, 30, 50].map((v) => (
+              <option key={v} value={v}>{v}</option>
+            ))}
+          </select>
+        </div>
+
+        <div style={styles.controlGroup}>
+          <button
+            style={styles.refreshButton}
+            onClick={() => fetchTransactions(1)}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '0.9'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '1'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            ⟳ Refresh
+          </button>
+        </div>
+      </div>
+
+      {error && <div style={styles.errorBox}>{error}</div>}
+
+      <div style={styles.tableWrapper}>
+        <table style={styles.table}>
+          <thead style={styles.thead}>
+            <tr>
+              <th style={styles.th}>Type</th>
+              <th style={styles.th}>Amount</th>
+              <th style={styles.th}>Status</th>
+              <th style={styles.th}>Currency</th>
+              <th style={styles.th}>Tx Hash</th>
+              <th style={styles.th}>Date</th>
+            </tr>
+          </thead>
+          <tbody style={styles.tbody}>
+            {loading ? (
+              <tr>
+                <td colSpan={6} style={styles.stateMessage}>
+                  Loading transactions...
+                </td>
+              </tr>
+            ) : filtered.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={styles.stateMessage}>
+                  No transactions found. Start by investing or borrowing!
+                </td>
+              </tr>
+            ) : (
+              filtered.map((tx) => <TransactionRow key={tx.id} transaction={tx} />)
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div style={styles.footer}>
+        <span>
+          Showing {filtered.length} of {total} transactions (page {page} of {pages})
+        </span>
+        <div style={styles.pagination}>
+          <button
+            style={styles.paginationButton(page <= 1)}
+            onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+            disabled={page <= 1}
+          >
+            ← Prev
+          </button>
+          <span>{page} / {pages}</span>
+          <button
+            style={styles.paginationButton(page >= pages)}
+            onClick={() => setPage((prev) => Math.min(pages, prev + 1))}
+            disabled={page >= pages}
+          >
+            Next →
+          </button>
         </div>
       </div>
     </main>

@@ -21,7 +21,6 @@ export default function Dashboard() {
   }, [investments])
 
   const totalEarned = useMemo(() => {
-    // Rough estimate: annualized earnings based on APY for 1 year.
     return investments.reduce((sum, inv) => {
       const apy = inv.apy ?? 0
       return sum + (inv.amount ?? 0) * (apy / 100)
@@ -34,111 +33,352 @@ export default function Dashboard() {
 
   const loading = walletLoading || investLoading || loansLoading || txLoading
 
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      backgroundColor: 'var(--surface)',
+      padding: 'var(--spacing-3xl) var(--spacing-2xl)',
+    },
+    header: {
+      marginBottom: 'var(--spacing-3xl)',
+      animation: 'fadeInUp 600ms ease-out',
+    },
+    greeting: {
+      fontSize: '2.5rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 700,
+      color: 'var(--text)',
+      marginBottom: 'var(--spacing-sm)',
+      letterSpacing: '-0.02em',
+    },
+    subtitle: {
+      fontSize: '1rem',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-mono)',
+    },
+    gridLayout: {
+      display: 'grid',
+      gridTemplateColumns: '2fr 1fr',
+      gap: 'var(--spacing-2xl)',
+      alignItems: 'start',
+    },
+    leftColumn: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'var(--spacing-2xl)',
+    },
+    heroCard: {
+      backgroundColor: 'var(--surface-2)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-lg)',
+      padding: 'var(--spacing-2xl)',
+      position: 'relative',
+      overflow: 'hidden',
+      animation: 'fadeInUp 600ms ease-out',
+    },
+    heroGradient: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 200, 255, 0.02) 100%)',
+      pointerEvents: 'none',
+    },
+    heroContent: {
+      position: 'relative',
+      zIndex: 1,
+    },
+    heroLabel: {
+      fontSize: '0.75rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      color: 'var(--text-muted)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.1em',
+      marginBottom: 'var(--spacing-md)',
+    },
+    heroAmount: {
+      fontSize: '3rem',
+      fontFamily: 'var(--font-mono)',
+      fontWeight: 500,
+      color: 'var(--accent)',
+      marginBottom: 'var(--spacing-sm)',
+      letterSpacing: '-0.01em',
+    },
+    heroCurrency: {
+      fontSize: '1rem',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+    },
+    statGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 'var(--spacing-lg)',
+      marginTop: 'var(--spacing-2xl)',
+      paddingTop: 'var(--spacing-2xl)',
+      borderTop: '1px solid hsl(220, 12%, 20%)',
+    },
+    stat: (delay) => ({
+      animation: `fadeInUp 600ms ease-out ${delay}ms forwards`,
+      opacity: 0,
+    }),
+    statLabel: {
+      fontSize: '0.7rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      color: 'var(--text-muted)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+      marginBottom: 'var(--spacing-sm)',
+    },
+    statValue: {
+      fontSize: '1.5rem',
+      fontFamily: 'var(--font-mono)',
+      fontWeight: 500,
+      color: 'var(--text)',
+      marginBottom: 'var(--spacing-xs)',
+    },
+    statUnit: {
+      fontSize: '0.75rem',
+      color: 'var(--text-muted)',
+      fontFamily: 'var(--font-mono)',
+    },
+    actionsBar: {
+      display: 'flex',
+      gap: 'var(--spacing-lg)',
+      marginTop: 'var(--spacing-2xl)',
+      paddingTop: 'var(--spacing-xl)',
+      borderTop: '1px solid hsl(220, 12%, 20%)',
+      animation: 'fadeInUp 700ms ease-out',
+    },
+    button: (variant = 'primary') => ({
+      flex: 1,
+      padding: 'var(--spacing-md) var(--spacing-lg)',
+      borderRadius: 'var(--radius-md)',
+      border: variant === 'primary' ? 'none' : '1px solid hsl(220, 12%, 25%)',
+      backgroundColor: variant === 'primary' ? 'var(--cta)' : 'transparent',
+      color: variant === 'primary' ? 'var(--surface)' : 'var(--text)',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      fontSize: '0.9375rem',
+      cursor: 'pointer',
+      transition: 'all 300ms ease-out',
+      textDecoration: 'none',
+      display: 'inline-block',
+      textAlign: 'center',
+    }),
+    sectionTitle: {
+      fontSize: '1.25rem',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 700,
+      color: 'var(--text)',
+      marginBottom: 'var(--spacing-lg)',
+      letterSpacing: '-0.01em',
+    },
+    cardContainer: {
+      backgroundColor: 'var(--surface-2)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-lg)',
+      padding: 'var(--spacing-xl)',
+      animation: 'fadeInUp 600ms ease-out 100ms forwards',
+      opacity: 0,
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      fontSize: '0.875rem',
+    },
+    thead: {
+      borderBottom: '1px solid hsl(220, 12%, 25%)',
+    },
+    th: {
+      padding: 'var(--spacing-md)',
+      textAlign: 'left',
+      fontFamily: 'var(--font-display)',
+      fontWeight: 600,
+      color: 'var(--text-muted)',
+      fontSize: '0.75rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+    },
+    tbody: {
+      borderColor: 'hsl(220, 12%, 20%)',
+    },
+    tr: {
+      borderBottom: '1px solid hsl(220, 12%, 20%)',
+      transition: 'background-color 300ms ease-out',
+    },
+    td: {
+      padding: 'var(--spacing-md)',
+      color: 'var(--text)',
+    },
+    emptyState: {
+      padding: 'var(--spacing-2xl)',
+      textAlign: 'center',
+      color: 'var(--text-muted)',
+      fontSize: '0.9375rem',
+    },
+    rightSidebar: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'var(--spacing-2xl)',
+    },
+    card: {
+      backgroundColor: 'var(--surface-2)',
+      border: '1px solid hsl(220, 12%, 20%)',
+      borderRadius: 'var(--radius-lg)',
+      padding: 'var(--spacing-xl)',
+      animation: 'fadeInUp 600ms ease-out 200ms forwards',
+      opacity: 0,
+    },
+    '@media (max-width: 1024px)': {
+      gridLayout: {
+        gridTemplateColumns: '1fr',
+      },
+      statGrid: {
+        gridTemplateColumns: 'repeat(2, 1fr)',
+      },
+    },
+    '@media (max-width: 640px)': {
+      container: {
+        padding: 'var(--spacing-xl) var(--spacing-lg)',
+      },
+      gridLayout: {
+        gridTemplateColumns: '1fr',
+      },
+      statGrid: {
+        gridTemplateColumns: '1fr',
+      },
+      heroAmount: {
+        fontSize: '2rem',
+      },
+    },
+  }
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold">Welcome back, {user?.name ?? 'octa trader'}</h1>
-            <p className="mt-1 text-slate-300">Here's a snapshot of your wallet and portfolio.</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="/invest"
-              className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-            >
-              Invest
-            </a>
-            <a
-              href="/borrow"
-              className="inline-flex items-center justify-center rounded-lg bg-slate-100/10 px-6 py-2 text-sm font-semibold text-white hover:bg-slate-100/20"
-            >
-              Borrow
-            </a>
-            <a
-              href="/spend"
-              className="inline-flex items-center justify-center rounded-lg bg-slate-100/10 px-6 py-2 text-sm font-semibold text-white hover:bg-slate-100/20"
-            >
-              Spend
-            </a>
-          </div>
-        </header>
+    <main style={styles.container}>
+      <header style={styles.header}>
+        <h1 style={styles.greeting}>Welcome, {user?.name?.split(' ')[0] || 'Trader'}</h1>
+        <p style={styles.subtitle}>Here's a snapshot of your wallet and portfolio.</p>
+      </header>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 grid gap-6">
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div className="p-6 rounded-2xl bg-white/10">
-                <h2 className="text-sm font-semibold tracking-wide text-slate-200">Total balance</h2>
-                <div className="mt-3 flex items-baseline gap-2">
-                  <span className="text-4xl font-bold">
-                    {walletLoading ? '—' : balance?.toFixed(2) ?? '0.00'}
-                  </span>
-                  <span className="text-sm text-slate-300">USDC</span>
+      <div style={styles.gridLayout}>
+        {/* Left Column: Main Content */}
+        <div style={styles.leftColumn}>
+          {/* Hero Card */}
+          <div style={styles.heroCard}>
+            <div style={styles.heroGradient} />
+            <div style={styles.heroContent}>
+              <div style={styles.heroLabel}>Total Balance</div>
+              <div style={styles.heroAmount}>
+                {walletLoading ? '—' : (balance?.toFixed(2) ?? '0.00')}
+              </div>
+              <div style={styles.heroCurrency}>USDC</div>
+
+              <div style={styles.statGrid}>
+                <div style={{ ...styles.stat, animationDelay: '100ms' }}>
+                  <div style={styles.statLabel}>Invested</div>
+                  <div style={styles.statValue}>{totalInvested.toFixed(0)}</div>
+                  <div style={styles.statUnit}>USDC</div>
                 </div>
-                <p className="mt-2 text-xs text-slate-400">Balances are estimated (USD).</p>
+                <div style={{ ...styles.stat, animationDelay: '200ms' }}>
+                  <div style={styles.statLabel}>Est. Earnings</div>
+                  <div style={styles.statValue}>{totalEarned.toFixed(0)}</div>
+                  <div style={styles.statUnit}>Annualized</div>
+                </div>
+                <div style={{ ...styles.stat, animationDelay: '300ms' }}>
+                  <div style={styles.statLabel}>Active Loans</div>
+                  <div style={styles.statValue}>{activeLoans}</div>
+                  <div style={styles.statUnit}>Positions</div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div className="p-6 rounded-2xl bg-white/10">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-300">Invested</div>
-                  <div className="mt-2 text-2xl font-bold">{totalInvested.toFixed(2)}</div>
-                  <div className="mt-1 text-xs text-slate-400">USDC total</div>
-                </div>
-                <div className="p-6 rounded-2xl bg-white/10">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-300">Estimated earnings</div>
-                  <div className="mt-2 text-2xl font-bold">{totalEarned.toFixed(2)}</div>
-                  <div className="mt-1 text-xs text-slate-400">Annualized</div>
-                </div>
-                <div className="p-6 rounded-2xl bg-white/10">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-slate-300">Active loans</div>
-                  <div className="mt-2 text-2xl font-bold">{activeLoans}</div>
-                  <div className="mt-1 text-xs text-slate-400">Open positions</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="p-6 rounded-2xl bg-white/10">
-                <h2 className="text-sm font-semibold text-slate-200">Portfolio performance</h2>
-                <PortfolioChart />
-              </div>
-
-              <div className="p-6 rounded-2xl bg-white/10">
-                <h2 className="text-sm font-semibold text-slate-200">Recent activity</h2>
-                <div className="mt-4 overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                    <thead className="border-b border-white/10 text-slate-300">
-                      <tr>
-                        <th className="py-2 px-2">Type</th>
-                        <th className="py-2 px-2">Amount</th>
-                        <th className="py-2 px-2">Status</th>
-                        <th className="py-2 px-2">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transactions.length === 0 && !txLoading ? (
-                        <tr>
-                          <td colSpan={4} className="py-4 text-center text-slate-400">
-                            No transactions yet.
-                          </td>
-                        </tr>
-                      ) : (
-                        transactions.slice(0, 6).map((tx) => (
-                          <TransactionRow key={tx.id} transaction={tx} />
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+              <div style={styles.actionsBar}>
+                <a href="/invest" style={{ ...styles.button('primary'), textDecoration: 'none' }}
+                   onMouseEnter={(e) => {
+                     e.currentTarget.style.opacity = '0.9'
+                     e.currentTarget.style.transform = 'translateY(-2px)'
+                   }}
+                   onMouseLeave={(e) => {
+                     e.currentTarget.style.opacity = '1'
+                     e.currentTarget.style.transform = 'translateY(0)'
+                   }}>
+                  Invest
+                </a>
+                <a href="/borrow" style={{ ...styles.button('secondary'), textDecoration: 'none' }}
+                   onMouseEnter={(e) => {
+                     e.currentTarget.style.borderColor = 'var(--accent)'
+                     e.currentTarget.style.color = 'var(--accent)'
+                   }}
+                   onMouseLeave={(e) => {
+                     e.currentTarget.style.borderColor = 'hsl(220, 12%, 25%)'
+                     e.currentTarget.style.color = 'var(--text)'
+                   }}>
+                  Borrow
+                </a>
+                <a href="/spend" style={{ ...styles.button('secondary'), textDecoration: 'none' }}
+                   onMouseEnter={(e) => {
+                     e.currentTarget.style.borderColor = 'var(--accent)'
+                     e.currentTarget.style.color = 'var(--accent)'
+                   }}
+                   onMouseLeave={(e) => {
+                     e.currentTarget.style.borderColor = 'hsl(220, 12%, 25%)'
+                     e.currentTarget.style.color = 'var(--text)'
+                   }}>
+                  Spend
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
+          {/* Portfolio Chart */}
+          <div style={styles.cardContainer}>
+            <h2 style={styles.sectionTitle}>Portfolio Performance</h2>
+            <PortfolioChart />
+          </div>
+
+          {/* Recent Activity */}
+          <div style={styles.cardContainer}>
+            <h2 style={styles.sectionTitle}>Recent Activity</h2>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={styles.table}>
+                <thead style={styles.thead}>
+                  <tr>
+                    <th style={styles.th}>Type</th>
+                    <th style={styles.th}>Amount</th>
+                    <th style={styles.th}>Status</th>
+                    <th style={styles.th}>Date</th>
+                  </tr>
+                </thead>
+                <tbody style={styles.tbody}>
+                  {transactions.length === 0 && !txLoading ? (
+                    <tr>
+                      <td colSpan={4} style={styles.emptyState}>
+                        No transactions yet. Start by investing or borrowing.
+                      </td>
+                    </tr>
+                  ) : (
+                    transactions.slice(0, 6).map((tx) => (
+                      <TransactionRow key={tx.id} transaction={tx} />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <div style={styles.rightSidebar}>
+          <div style={styles.card}>
             <WalletCard balance={balance ?? 0} />
+          </div>
+          <div style={styles.card}>
             <LoanCard loan={loans[0] ?? { collateral: 0, borrowed: 0, repaid: 0, healthFactor: 0 }} />
           </div>
-        </section>
+        </div>
       </div>
     </main>
   )

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Landing from './pages/Landing'
@@ -14,7 +14,7 @@ import Explorer from './pages/Explorer'
 function RequireAuth({ children }) {
   const { user, loading } = useAuth()
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">Loading...</div>
+  if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--surface)', color: 'var(--text)' }}>Loading...</div>
   if (!user) return <Navigate to="/login" replace />
   return children
 }
@@ -22,16 +22,27 @@ function RequireAuth({ children }) {
 function RedirectIfAuth({ children }) {
   const { user, loading } = useAuth()
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">Loading...</div>
+  if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--surface)', color: 'var(--text)' }}>Loading...</div>
   if (user) return <Navigate to="/dashboard" replace />
   return children
 }
 
-export default function App() {
+function AppContent() {
+  const { user } = useAuth()
+  const location = useLocation()
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/'
+
+  const mainStyles = {
+    marginLeft: user && !isAuthPage ? '64px' : '0',
+    transition: 'margin-left 300ms ease-out',
+    flex: 1,
+    minHeight: '100vh',
+  }
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Navbar />
+    <>
+      <Navbar />
+      <main style={mainStyles}>
         <Routes>
           <Route
             path="/"
@@ -109,6 +120,16 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+      </main>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
       </BrowserRouter>
     </AuthProvider>
   )
