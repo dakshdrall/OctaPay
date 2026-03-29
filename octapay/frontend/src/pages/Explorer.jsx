@@ -1,289 +1,71 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
+
+const WALLETS = [
+  { name: 'Rahul', address: 'GBFNQL377LPLSEDR3BMHVS4ZQ3IWPTBZESI2LRXI3H6T7INGSDJCVBIF' },
+  { name: 'Priya', address: 'GDRQG5IVUHOS46RM4PAPCFF7TMYLQ3AHWC63UABMW4VJOMBXDF36XFCM' },
+  { name: 'Arjun', address: 'GDAZVM5TXYSKWOPRDQ77Z7XDKWHODTFAFTT2ECK63KLUXPTLTVHOKCI6' },
+  { name: 'Sneha', address: 'GCSRPWQUFP7EZKSMRYQTCOMZBLEAVTYRWQJDESBDYQFHG5GUEZPTZFFF' },
+  { name: 'Karan', address: 'GCTWLP274QCAJRYTPKMAWAHS6HE2PDKAWNHXW2HBYIRTINGJ6ZGGQFFP' },
+];
+
+const HORIZON = 'https://horizon-testnet.stellar.org';
 
 export default function Explorer() {
-  const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [selected, setSelected] = useState(WALLETS[0]);
+  const [txns, setTxns] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchTransactions()
-  }, [])
+    setLoading(true);
+    setError(null);
+    fetch(`${HORIZON}/accounts/${selected.address}/transactions?limit=10&order=desc`)
+      .then(r => r.json())
+      .then(data => { setTxns(data._embedded?.records || []); setLoading(false); })
+      .catch(() => { setError('Could not fetch from Horizon'); setLoading(false); });
+  }, [selected]);
 
-  const fetchTransactions = async () => {
-    try {
-      setLoading(true)
-      const keysRes = await fetch('/api/wallet/public-keys')
-      if (!keysRes.ok) throw new Error('Failed to fetch public keys')
-      const { publicKeys } = await keysRes.json()
-
-      const allTxs = []
-      for (const publicKey of publicKeys) {
-        const txs = await fetchAccountTransactions(publicKey)
-        allTxs.push(...txs)
-      }
-
-      allTxs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      setTransactions(allTxs)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchAccountTransactions = async (publicKey) => {
-    const response = await fetch(`https://horizon-testnet.stellar.org/accounts/${publicKey}/transactions?limit=50&order=desc`)
-    if (!response.ok) return []
-    const data = await response.json()
-    return data._embedded.records
-  }
-
-  const truncate = (str, len = 12) => {
-    if (!str) return 'N/A'
-    return str.length > len ? `${str.slice(0, len)}...` : str
-  }
-
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      backgroundColor: 'var(--surface)',
-      padding: 'var(--spacing-3xl) var(--spacing-2xl)',
-    },
-    header: {
-      marginBottom: 'var(--spacing-2xl)',
-      animation: 'fadeInUp 600ms ease-out',
-    },
-    title: {
-      fontSize: '2.5rem',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 700,
-      color: 'var(--text)',
-      marginBottom: 'var(--spacing-sm)',
-      letterSpacing: '-0.02em',
-    },
-    subtitle: {
-      fontSize: '1rem',
-      color: 'var(--text-muted)',
-      fontFamily: 'var(--font-mono)',
-    },
-    controls: {
-      display: 'flex',
-      gap: 'var(--spacing-lg)',
-      marginBottom: 'var(--spacing-xl)',
-      animation: 'fadeInUp 600ms ease-out 100ms forwards',
-      opacity: 0,
-    },
-    refreshButton: {
-      padding: 'var(--spacing-md) var(--spacing-lg)',
-      backgroundColor: 'var(--cta)',
-      color: 'var(--surface)',
-      border: 'none',
-      borderRadius: 'var(--radius-md)',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 600,
-      cursor: 'pointer',
-      transition: 'all 300ms ease-out',
-    },
-    tableWrapper: {
-      backgroundColor: 'var(--surface-2)',
-      border: '1px solid hsl(220, 12%, 20%)',
-      borderRadius: 'var(--radius-lg)',
-      overflow: 'hidden',
-      animation: 'fadeInUp 600ms ease-out 200ms forwards',
-      opacity: 0,
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-      fontSize: '0.875rem',
-    },
-    thead: {
-      backgroundColor: 'rgba(0, 255, 255, 0.05)',
-      borderBottom: '2px solid hsl(220, 12%, 25%)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 10,
-    },
-    th: {
-      padding: 'var(--spacing-lg)',
-      textAlign: 'left',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 600,
-      color: 'var(--accent)',
-      fontSize: '0.75rem',
-      textTransform: 'uppercase',
-      letterSpacing: '0.1em',
-      whiteSpace: 'nowrap',
-    },
-    tbody: {
-    },
-    tr: {
-      borderBottom: '1px solid hsl(220, 12%, 20%)',
-      transition: 'background-color 300ms ease-out',
-    },
-    td: {
-      padding: 'var(--spacing-lg)',
-      color: 'var(--text)',
-      fontFamily: 'var(--font-mono)',
-      fontSize: '0.8125rem',
-    },
-    hash: {
-      color: 'var(--accent)',
-      fontWeight: 500,
-      cursor: 'pointer',
-      textDecoration: 'none',
-      transition: 'all 300ms ease-out',
-    },
-    amount: {
-      color: 'var(--cta)',
-      fontWeight: 500,
-    },
-    date: {
-      color: 'var(--text-muted)',
-      fontSize: '0.75rem',
-    },
-    emptyState: {
-      padding: 'var(--spacing-3xl) var(--spacing-2xl)',
-      textAlign: 'center',
-      color: 'var(--text-muted)',
-      fontFamily: 'var(--font-mono)',
-    },
-    loadingState: {
-      padding: 'var(--spacing-3xl)',
-      textAlign: 'center',
-      color: 'var(--text-muted)',
-    },
-    errorState: {
-      padding: 'var(--spacing-2xl)',
-      backgroundColor: 'rgba(255, 0, 0, 0.1)',
-      border: '1px solid rgba(255, 0, 0, 0.2)',
-      borderRadius: 'var(--radius-lg)',
-      color: 'var(--danger)',
-      textAlign: 'center',
-      fontFamily: 'var(--font-mono)',
-      fontSize: '0.9375rem',
-    },
-    '@media (max-width: 640px)': {
-      container: {
-        padding: 'var(--spacing-xl) var(--spacing-lg)',
-      },
-      title: {
-        fontSize: '1.75rem',
-      },
-      table: {
-        fontSize: '0.75rem',
-      },
-      th: {
-        padding: 'var(--spacing-md)',
-      },
-      td: {
-        padding: 'var(--spacing-md)',
-      },
-    },
-  }
+  const s = {
+    page: { padding: '2rem', fontFamily: 'var(--font-display)' },
+    h1: { fontSize: '2rem', fontWeight: 800, color: 'var(--color-cyan)', marginBottom: '1.5rem' },
+    tabs: { display: 'flex', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap' },
+    addr: { fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem', wordBreak: 'break-all' },
+    card: { background: 'var(--color-surface)', border: '1px solid var(--color-surface-2)', borderRadius: '12px', padding: '1rem 1.25rem', marginBottom: '0.75rem' },
+    txid: { fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-cyan)' },
+    meta: { marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' },
+    link: { fontSize: '0.75rem', color: 'var(--color-cyan)', textDecoration: 'none', marginTop: '0.25rem', display: 'inline-block' },
+    muted: { color: 'var(--color-text-muted)' },
+    err: { color: '#f87171' },
+  };
 
   return (
-    <div style={styles.container}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>Stellar Explorer</h1>
-        <p style={styles.subtitle}>View all on-chain transactions from OctaPay wallets on the Stellar testnet</p>
-      </header>
-
-      <div style={styles.controls}>
-        <button
-          style={styles.refreshButton}
-          onClick={fetchTransactions}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '0.9'
-            e.currentTarget.style.transform = 'translateY(-2px)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '1'
-            e.currentTarget.style.transform = 'translateY(0)'
-          }}
-        >
-          ⟳ Refresh
-        </button>
+    <div style={s.page}>
+      <h1 style={s.h1}>Explorer</h1>
+      <div style={s.tabs}>
+        {WALLETS.map(w => (
+          <button key={w.address} onClick={() => setSelected(w)} style={{
+            padding: '0.5rem 1.25rem', borderRadius: '999px', cursor: 'pointer', fontWeight: 600,
+            fontFamily: 'var(--font-display)', transition: 'all 0.2s',
+            border: `1px solid ${selected.address === w.address ? 'var(--color-cyan)' : 'var(--color-surface-2)'}`,
+            background: selected.address === w.address ? 'var(--color-cyan)' : 'var(--color-surface)',
+            color: selected.address === w.address ? 'var(--color-bg)' : 'var(--color-text)',
+          }}>{w.name}</button>
+        ))}
       </div>
-
-      {error ? (
-        <div style={styles.errorState}>Error: {error}</div>
-      ) : loading ? (
-        <div style={styles.loadingState}>Loading transactions...</div>
-      ) : transactions.length === 0 ? (
-        <div style={styles.emptyState}>No transactions found</div>
-      ) : (
-        <div style={styles.tableWrapper}>
-          <table style={styles.table}>
-            <thead style={styles.thead}>
-              <tr>
-                <th style={styles.th}>Transaction Hash</th>
-                <th style={styles.th}>From</th>
-                <th style={styles.th}>To</th>
-                <th style={styles.th}>Amount</th>
-                <th style={styles.th}>Asset</th>
-                <th style={styles.th}>Date</th>
-              </tr>
-            </thead>
-            <tbody style={styles.tbody}>
-              {transactions.map((tx, idx) => (
-                <tr key={`${tx.hash}-${idx}`} style={styles.tr}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(0, 255, 255, 0.05)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                    }}>
-                  <td style={styles.td}>
-                    <a
-                      href={`https://stellar.expert/explorer/testnet/tx/${tx.hash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={styles.hash}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = 'hsl(180, 100%, 55%)'
-                        e.currentTarget.style.textDecoration = 'underline'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = 'var(--accent)'
-                        e.currentTarget.style.textDecoration = 'none'
-                      }}
-                    >
-                      {truncate(tx.hash, 16)}
-                    </a>
-                  </td>
-                  <td style={styles.td}>{truncate(tx.source_account, 14)}</td>
-                  <td style={styles.td}>
-                    {tx.operations && tx.operations.length > 0 && tx.operations[0].destination
-                      ? truncate(tx.operations[0].destination, 14)
-                      : 'N/A'}
-                  </td>
-                  <td style={{ ...styles.td, ...styles.amount }}>
-                    {tx.operations && tx.operations.length > 0 && tx.operations[0].amount
-                      ? `${parseFloat(tx.operations[0].amount).toFixed(4)}`
-                      : 'N/A'}
-                  </td>
-                  <td style={styles.td}>
-                    {tx.operations && tx.operations.length > 0
-                      ? tx.operations[0].asset_type === 'native'
-                        ? 'XLM'
-                        : tx.operations[0].asset_code || 'N/A'
-                      : 'N/A'}
-                  </td>
-                  <td style={{ ...styles.td, ...styles.date }}>
-                    {new Date(tx.created_at).toLocaleString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <p style={s.addr}>{selected.address}</p>
+      {loading && <p style={s.muted}>Loading transactions…</p>}
+      {error && <p style={s.err}>{error}</p>}
+      {!loading && !error && txns.length === 0 && <p style={s.muted}>No transactions found.</p>}
+      {txns.map(tx => (
+        <div key={tx.id} style={s.card}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <span style={s.txid}>{tx.id.slice(0, 16)}…</span>
+            <span style={s.meta}>{new Date(tx.created_at).toLocaleString()}</span>
+          </div>
+          <div style={s.meta}>Fee: {tx.fee_charged} stroops · Ledger: {tx.ledger}</div>
+          <a href={`https://stellar.expert/explorer/testnet/tx/${tx.id}`} target="_blank" rel="noopener noreferrer" style={s.link}>View on Stellar Expert →</a>
         </div>
-      )}
+      ))}
     </div>
-  )
+  );
 }
