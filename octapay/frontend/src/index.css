@@ -10,8 +10,8 @@
   --color-cyan-dim: hsl(180, 100%, 35%);
   --color-text: hsl(220, 20%, 92%);
   --color-text-muted: hsl(220, 10%, 55%);
-  --font-display: 'Syne', sans-serif;
-  --font-mono: 'DM Mono', monospace;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "DM Mono", monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
