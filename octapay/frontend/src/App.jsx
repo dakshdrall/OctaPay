@@ -9,6 +9,7 @@ import Borrow from './pages/Borrow'
 import Spend from './pages/Spend'
 import Profile from './pages/Profile'
 import Transactions from './pages/Transactions'
+import Explorer from './pages/Explorer'
 
 function RequireAuth({ children }) {
   const { user, loading } = useAuth()
@@ -94,6 +95,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <Transactions />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/explorer"
+            element={
+              <RequireAuth>
+                <Explorer />
               </RequireAuth>
             }
           />

@@ -5,6 +5,8 @@ import {
   getWalletBalance,
   getWalletTransactions,
   sendWalletUSDC,
+  sendWalletXLM,
+  getAllPublicKeys,
 } from '../controllers/walletController.js'
 import { requireAuth } from '../middleware/authMiddleware.js'
 
@@ -16,5 +18,7 @@ router.post('/', requireAuth, createWallet)
 router.get('/balance', requireAuth, getWalletBalance)
 router.get('/transactions', requireAuth, getWalletTransactions)
 router.post('/send', requireAuth, sendWalletUSDC)
+router.post('/send-xlm', requireAuth, sendWalletXLM)
+router.get('/public-keys', getAllPublicKeys)
 
 export default router

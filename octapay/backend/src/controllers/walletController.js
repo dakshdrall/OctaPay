@@ -1,6 +1,6 @@
 import prisma from '../prisma/client.js'
 import { createWallet as stellarCreateWallet, getBalance, fundWallet } from '../stellar/wallet.js'
-import { getAccountTransactions, sendUSDC } from '../stellar/transactions.js'
+import { getAccountTransactions, sendUSDC, sendXLM } from '../stellar/transactions.js'
 import { encryptText, decryptText } from '../utils/crypto.js'
 
 export const getWallet = async (req, res, next) => {
@@ -117,6 +117,54 @@ export const sendWalletUSDC = async (req, res, next) => {
     })
 
     res.json({ txHash: tx.hash })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const sendWalletXLM = async (req, res, next) => {
+  try {
+    const { to, amount } = req.body
+    if (!to || !amount) {
+      return res.status(400).json({ error: 'Missing destination or amount' })
+    }
+
+    const wallet = await prisma.wallet.findUnique({
+      where: { userId: req.user.id },
+    })
+    if (!wallet) {
+      return res.status(404).json({ error: 'Wallet not found' })
+    }
+
+    const secret = decryptText(wallet.encryptedSecretKey)
+    const tx = await sendXLM({
+      sourceSecret: secret,
+      destinationPublic: to,
+      amount,
+    })
+
+    await prisma.transaction.create({
+      data: {
+        userId: req.user.id,
+        type: 'send_xlm',
+        amount: Number(amount),
+        status: 'completed',
+        txHash: tx.hash,
+      },
+    })
+
+    res.json({ txHash: tx.hash })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getAllPublicKeys = async (req, res, next) => {
+  try {
+    const wallets = await prisma.wallet.findMany({
+      select: { stellarPublicKey: true }
+    })
+    res.json({ publicKeys: wallets.map(w => w.stellarPublicKey) })
   } catch (err) {
     next(err)
   }

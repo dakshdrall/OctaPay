@@ -7,6 +7,7 @@ const navItems = [
   { label: 'Borrow', href: '/borrow' },
   { label: 'Spend', href: '/spend' },
   { label: 'Transactions', href: '/transactions' },
+  { label: 'Explorer', href: '/explorer' },
   { label: 'Profile', href: '/profile' },
 ]
 

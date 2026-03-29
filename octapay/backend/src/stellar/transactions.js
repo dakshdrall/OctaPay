@@ -34,13 +34,24 @@ export const sendUSDC = async ({ sourceSecret, destinationPublic, amount }) => {
   return server.submitTransaction(tx)
 }
 
-export const getAccountTransactions = async (publicKey, limit = 10) => {
-  const accountTx = await server
-    .transactions()
-    .forAccount(publicKey)
-    .limit(limit)
-    .order('desc')
-    .call()
+export const sendXLM = async ({ sourceSecret, destinationPublic, amount }) => {
+  const sourceKeypair = Keypair.fromSecret(sourceSecret)
+  const account = await server.loadAccount(sourceKeypair.publicKey())
 
-  return accountTx.records
+  const tx = new TransactionBuilder(account, {
+    fee: await server.fetchBaseFee(),
+    networkPassphrase: Networks.TESTNET,
+  })
+    .addOperation(
+      Operation.payment({
+        destination: destinationPublic,
+        asset: Asset.native(),
+        amount: amount.toString(),
+      })
+    )
+    .setTimeout(30)
+    .build()
+
+  tx.sign(sourceKeypair)
+  return server.submitTransaction(tx)
 }
