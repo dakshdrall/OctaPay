@@ -1,65 +1,70 @@
 import { Link } from 'react-router-dom'
 
 const FEATURES = [
-  {
-    title: 'Auto Growth',
-    description: 'Invest in high-yield products and watch a data-driven balance chart grow.',
-  },
-  {
-    title: 'Collateralized Borrowing',
-    description: 'Lock assets to borrow USDC at competitive rates with Soroban security.',
-  },
-  {
-    title: 'Seamless Spending',
-    description: 'Virtual card mock mode for expense tracking and instant spend insights.',
-  },
-  {
-    title: 'Safe Self-Custody',
-    description: 'Your keys never leave the backend vault, while you control the funds.',
-  },
+  { title: 'Auto Growth', description: 'Invest in high-yield products and watch a data-driven balance chart grow.' },
+  { title: 'Collateralized Borrowing', description: 'Lock assets to borrow USDC at competitive rates with Soroban security.' },
+  { title: 'Seamless Spending', description: 'Virtual card mock mode for expense tracking and instant spend insights.' },
+  { title: 'Safe Self-Custody', description: 'Your keys never leave the backend vault, while you control the funds.' },
 ]
 
 export default function Landing() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-sky-950 text-white">
-      <div className="mx-auto max-w-7xl px-4 py-20 md:py-24">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+    <main style={{ minHeight: '100vh', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-display)' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '5rem 1.5rem' }}>
+        <div style={{ display: 'grid', gap: '3rem', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', alignItems: 'center' }}>
+
           <article>
-            <p className="inline-flex items-center rounded-full bg-indigo-600/30 px-3 py-1 text-xs uppercase tracking-wider text-indigo-200">
+            <p style={{
+              display: 'inline-flex', alignItems: 'center',
+              borderRadius: '999px', border: '1px solid var(--color-cyan)',
+              padding: '0.25rem 0.875rem', fontSize: '0.7rem',
+              textTransform: 'uppercase', letterSpacing: '0.1em',
+              color: 'var(--color-cyan)', marginBottom: '1.5rem'
+            }}>
               Built on Stellar testnet & Soroban
             </p>
-            <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
-              Your Money. Growing. Always.
+            <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 800, lineHeight: 1.05, marginBottom: '1.25rem' }}>
+              Your Money.<br />Growing. Always.
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-slate-300">
+            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', maxWidth: '480px', lineHeight: 1.7, marginBottom: '2rem' }}>
               OctaPay gives you a clean DeFi experience with wallet management, earnings analytics,
               collateral lending, and simplified spending in a single workspace.
             </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/login"
-                className="rounded-lg bg-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-400"
-              >
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <Link to="/login" style={{
+                padding: '0.75rem 1.75rem', borderRadius: '8px', fontWeight: 700,
+                fontSize: '0.9rem', textDecoration: 'none',
+                background: 'var(--color-cyan)', color: 'var(--color-bg)',
+                transition: 'opacity 0.2s'
+              }}>
                 Get started
               </Link>
-              <Link
-                to="/dashboard"
-                className="rounded-lg border border-indigo-300/40 px-6 py-3 text-sm font-semibold text-slate-100 hover:bg-white/10"
-              >
+              <Link to="/dashboard" style={{
+                padding: '0.75rem 1.75rem', borderRadius: '8px', fontWeight: 600,
+                fontSize: '0.9rem', textDecoration: 'none',
+                border: '1px solid var(--color-surface-2)',
+                color: 'var(--color-text)', background: 'var(--color-surface)',
+                transition: 'border-color 0.2s'
+              }}>
                 View dashboard
               </Link>
             </div>
           </article>
 
-          <section className="grid gap-4">
-            {FEATURES.map((feature) => (
-              <div key={feature.title} className="rounded-2xl border border-white/10 bg-slate-900/50 p-5 shadow-lg shadow-black/20">
-                <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                <p className="mt-2 text-slate-300">{feature.description}</p>
+          <section style={{ display: 'grid', gap: '1rem' }}>
+            {FEATURES.map((f) => (
+              <div key={f.title} style={{
+                borderRadius: '16px',
+                border: '1px solid var(--color-surface-2)',
+                background: 'var(--color-surface)',
+                padding: '1.25rem 1.5rem',
+              }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-cyan)', marginBottom: '0.4rem' }}>{f.title}</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>{f.description}</p>
               </div>
             ))}
           </section>
+
         </div>
       </div>
     </main>
