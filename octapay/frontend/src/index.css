@@ -23,3 +23,21 @@ html, body, #root {
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
 }
+
+/* aliases for component compatibility */
+:root {
+  --accent: var(--color-cyan);
+  --cta: var(--color-cyan);
+  --surface: var(--color-surface);
+  --surface-2: var(--color-surface-2);
+  --text: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --danger: #f87171;
+  --radius-md: 8px;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.25rem;
+  --spacing-2xl: 1.75rem;
+  --spacing-3xl: 3rem;
+}
