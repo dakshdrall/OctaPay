@@ -17,194 +17,79 @@ export default function Navbar() {
   const { user, logout } = useAuth()
   const [expanded, setExpanded] = useState(false)
 
-  const isAuthenticated = !!user
+  if (!user) return null
 
-  const sidebarStyles = {
-    sidebar: {
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      height: '100vh',
-      width: expanded ? '200px' : '64px',
-      backgroundColor: 'var(--surface-2)',
-      borderRight: '1px solid hsl(220, 12%, 20%)',
-      transition: 'width 300ms ease-out',
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 1000,
-      padding: 'var(--spacing-md) 0',
-      boxShadow: 'var(--shadow-lg)',
-    },
-    header: {
-      padding: 'var(--spacing-md)',
-      textAlign: 'center',
-      borderBottom: '1px solid hsl(220, 12%, 20%)',
-      marginBottom: 'var(--spacing-lg)',
-    },
-    logo: {
-      fontFamily: 'var(--font-display)',
-      fontSize: expanded ? '1.5rem' : '1.25rem',
-      fontWeight: 700,
-      color: 'var(--accent)',
-      transition: 'all 300ms ease-out',
-    },
-    navList: {
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--spacing-sm)',
-      padding: '0 var(--spacing-sm)',
-      overflowY: 'auto',
-    },
-    navItem: (isActive) => ({
-      display: 'flex',
-      alignItems: 'center',
-      gap: 'var(--spacing-md)',
-      padding: 'var(--spacing-md) var(--spacing-lg)',
-      borderRadius: 'var(--radius-lg)',
-      color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-      textDecoration: 'none',
-      transition: 'all 300ms ease-out',
-      cursor: 'pointer',
-      fontSize: '0.875rem',
-      fontWeight: isActive ? 600 : 400,
-      backgroundColor: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
-      border: isActive ? '1px solid rgba(0, 255, 255, 0.2)' : '1px solid transparent',
-      position: 'relative',
-      overflow: 'hidden',
-    }),
-    icon: {
-      fontSize: '1.25rem',
-      minWidth: '1.5rem',
-      textAlign: 'center',
-    },
-    label: {
-      whiteSpace: 'nowrap',
-      opacity: expanded ? 1 : 0,
-      transition: 'opacity 300ms ease-out',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 500,
-    },
-    footer: {
-      padding: 'var(--spacing-lg) var(--spacing-md)',
-      borderTop: '1px solid hsl(220, 12%, 20%)',
-      marginTop: 'auto',
-    },
-    userInfo: {
-      marginBottom: 'var(--spacing-lg)',
-      padding: 'var(--spacing-md) var(--spacing-lg)',
-      backgroundColor: 'rgba(0, 255, 255, 0.05)',
-      borderRadius: 'var(--radius-md)',
-      border: '1px solid rgba(0, 255, 255, 0.1)',
-      transition: 'all 300ms ease-out',
-    },
-    userName: {
-      fontSize: '0.75rem',
-      color: 'var(--text-muted)',
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em',
-      marginBottom: '0.25rem',
-    },
-    userEmail: {
-      fontSize: expanded ? '0.75rem' : '0.625rem',
-      color: 'var(--accent)',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    },
-    toggleButton: {
-      background: 'transparent',
-      border: '1px solid hsl(220, 12%, 20%)',
-      color: 'var(--text-muted)',
-      padding: 'var(--spacing-md)',
-      borderRadius: 'var(--radius-md)',
-      cursor: 'pointer',
-      transition: 'all 300ms ease-out',
-      marginBottom: 'var(--spacing-md)',
-      fontSize: '0.875rem',
-    },
-    logoutButton: {
-      background: 'rgba(255, 0, 0, 0.1)',
-      border: '1px solid rgba(255, 0, 0, 0.2)',
-      color: 'var(--danger)',
-      padding: expanded ? 'var(--spacing-md) var(--spacing-lg)' : 'var(--spacing-md)',
-      borderRadius: 'var(--radius-md)',
-      cursor: 'pointer',
-      transition: 'all 300ms ease-out',
-      fontSize: '0.875rem',
-      fontFamily: 'var(--font-display)',
-      fontWeight: 500,
-      width: '100%',
-      textAlign: 'center',
-    },
-  }
-
-  const handleNavItemClick = (e, href) => {
-    // Optional: collapse sidebar on mobile after navigation
-    if (window.innerWidth < 768) {
-      setExpanded(false)
-    }
-  }
-
-  if (!isAuthenticated) {
-    return null
-  }
+  const W = expanded ? '200px' : '56px'
 
   return (
-    <nav style={sidebarStyles.sidebar}>
-      <div style={sidebarStyles.header}>
-        <div style={sidebarStyles.logo}>◆</div>
-      </div>
+    <>
+      <nav
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}
+        style={{
+          position: 'fixed', left: 0, top: 0, height: '100vh', width: W,
+          background: 'var(--surface-2)', borderRight: '1px solid hsl(220,12%,18%)',
+          transition: 'width 250ms ease', display: 'flex', flexDirection: 'column',
+          zIndex: 1000, overflow: 'hidden',
+        }}
+      >
+        {/* Logo */}
+        <div style={{ padding: '1.25rem 0', textAlign: 'center', borderBottom: '1px solid hsl(220,12%,18%)' }}>
+          <span style={{ fontSize: '1.4rem', color: 'var(--accent)', fontFamily: 'var(--font-display)', fontWeight: 700 }}>◆</span>
+        </div>
 
-      <ul style={sidebarStyles.navList}>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <li key={item.href} style={{ listStyle: 'none' }}>
-              <Link
-                to={item.href}
-                style={sidebarStyles.navItem(isActive)}
-                onClick={(e) => handleNavItemClick(e, item.href)}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0, 255, 255, 0.15)'
-                  e.currentTarget.style.color = 'var(--accent)'
+        {/* Nav items */}
+        <ul style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px', padding: '0.75rem 0.5rem', listStyle: 'none', margin: 0, overflowY: 'auto' }}>
+          {navItems.map((item) => {
+            const isActive = pathname === item.href
+            return (
+              <li key={item.href}>
+                <Link to={item.href} style={{
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                  padding: '0.625rem 0.75rem', borderRadius: '8px',
+                  textDecoration: 'none', transition: 'all 200ms ease',
+                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                  background: isActive ? 'rgba(0,255,255,0.08)' : 'transparent',
+                  border: isActive ? '1px solid rgba(0,255,255,0.15)' : '1px solid transparent',
+                  whiteSpace: 'nowrap', overflow: 'hidden',
                 }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent'
-                  e.currentTarget.style.color = isActive ? 'var(--accent)' : 'var(--text-muted)'
-                }}
-              >
-                <span style={sidebarStyles.icon}>{item.icon}</span>
-                <span style={sidebarStyles.label}>{item.label}</span>
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,255,255,0.12)'; e.currentTarget.style.color = 'var(--accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = isActive ? 'rgba(0,255,255,0.08)' : 'transparent'; e.currentTarget.style.color = isActive ? 'var(--accent)' : 'var(--text-muted)' }}
+                >
+                  <span style={{ fontSize: '1.1rem', minWidth: '1.25rem', textAlign: 'center', flexShrink: 0 }}>{item.icon}</span>
+                  <span style={{ fontSize: '0.875rem', fontFamily: 'var(--font-display)', fontWeight: 500, opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}>
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
 
-      <div style={sidebarStyles.footer}>
-        {isAuthenticated && (
-          <>
-            <div style={sidebarStyles.userInfo}>
-              <div style={sidebarStyles.userName}>{user?.name?.split(' ')[0] || 'User'}</div>
-              <div style={sidebarStyles.userEmail}>{user?.email}</div>
+        {/* Footer */}
+        <div style={{ padding: '0.75rem 0.5rem', borderTop: '1px solid hsl(220,12%,18%)' }}>
+          <div style={{ padding: '0.5rem 0.75rem', marginBottom: '0.5rem', overflow: 'hidden' }}>
+            <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              {user?.name?.split(' ')[0] || 'User'}
             </div>
-            <button
-              style={sidebarStyles.toggleButton}
-              onClick={() => setExpanded(!expanded)}
-              title={expanded ? 'Collapse' : 'Expand'}
-            >
-              {expanded ? '◄' : '►'}
-            </button>
-            <button
-              style={sidebarStyles.logoutButton}
-              onClick={logout}
-            >
-              {expanded ? 'Logout' : '✕'}
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
+            <div style={{ fontSize: '0.65rem', color: 'var(--accent)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', opacity: expanded ? 1 : 0, transition: 'opacity 200ms ease' }}>
+              {user?.email}
+            </div>
+          </div>
+          <button onClick={logout} style={{
+            width: '100%', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer',
+            background: 'rgba(255,0,0,0.08)', border: '1px solid rgba(255,0,0,0.15)',
+            color: 'var(--danger)', fontSize: '0.8rem', fontFamily: 'var(--font-display)',
+            fontWeight: 500, textAlign: 'center', transition: 'all 200ms ease',
+            whiteSpace: 'nowrap', overflow: 'hidden',
+          }}>
+            {expanded ? 'Logout' : '✕'}
+          </button>
+        </div>
+      </nav>
+
+      {/* Spacer so content doesn't go under sidebar */}
+      <div style={{ width: W, flexShrink: 0, transition: 'width 250ms ease' }} />
+    </>
   )
 }
