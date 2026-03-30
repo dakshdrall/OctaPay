@@ -136,7 +136,7 @@ export default function Invest() {
                   </button>
                   <button
                     onClick={closeModal}
-                    className="flex-1 rounded-lg bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200"
+                    className="flex-1 rounded-lg bg-gray-700 px-5 py-3 text-sm font-semibold text-white hover:bg-gray-600"
                   >
                     Cancel
                   </button>
