@@ -33,7 +33,7 @@ function AppContent() {
   return (
     <div style={{ display: 'flex' }}>
       <Navbar />
-      <main style={{ flex: 1, minHeight: '100vh', marginLeft: user && !isAuthPage ? '56px' : '0', transition: 'margin-left 250ms ease' }}>
+      <main className={user && !isAuthPage ? 'with-sidebar' : ''} style={{ flex: 1, minHeight: '100vh', marginLeft: user && !isAuthPage ? '56px' : '0', transition: 'margin-left 250ms ease' }}>
         <Routes>
           <Route path="/" element={<RedirectIfAuth><Landing /></RedirectIfAuth>} />
           <Route path="/login" element={<RedirectIfAuth><Login /></RedirectIfAuth>} />

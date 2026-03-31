@@ -53,14 +53,14 @@ export default function Dashboard() {
         <p style={{ color: s.muted, fontFamily: s.mono, fontSize: '0.9rem' }}>Here's a snapshot of your wallet and portfolio.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }} className='dash-grid-main'>
         <Card style={{ background: 'hsl(180,30%,12%)', border: '1px solid hsl(180,30%,18%)' }}>
           <div style={{ fontSize: '0.65rem', fontWeight: 600, color: s.muted, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>Total Balance</div>
           <div style={{ fontSize: '3.5rem', fontFamily: s.mono, fontWeight: 500, color: s.cyan, letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '0.35rem' }}>
             {walletLoading ? '—' : (balance?.toFixed(2) ?? '0.00')}
           </div>
           <div style={{ fontSize: '1rem', color: s.muted, fontFamily: s.mono, marginBottom: '2rem' }}>USDC</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem', paddingTop: '1.5rem', borderTop: '1px solid hsl(180,20%,18%)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem', paddingTop: '1.5rem', borderTop: '1px solid hsl(180,20%,18%)' }} className='dash-grid-stats'>
             <StatBox label="Invested" value={totalInvested.toFixed(0)} unit="USDC" />
             <StatBox label="Est. Earnings" value={totalEarned.toFixed(0)} unit="Annualized" />
             <StatBox label="Active Loans" value={activeLoans} unit="Positions" />
@@ -80,7 +80,7 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }} className='dash-grid-main'>
         <Card>
           <PortfolioChart />
         </Card>

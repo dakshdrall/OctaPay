@@ -26,7 +26,7 @@ export default function Navbar() {
       <nav
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
-        style={{
+        className='sidebar' style={{
           position: 'fixed', left: 0, top: 0, height: '100vh', width: W,
           background: 'var(--surface-2)', borderRight: '1px solid hsl(220,12%,18%)',
           transition: 'width 250ms ease', display: 'flex', flexDirection: 'column',
