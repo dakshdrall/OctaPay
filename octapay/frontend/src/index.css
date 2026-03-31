@@ -41,3 +41,11 @@ html, body, #root {
   --spacing-2xl: 1.75rem;
   --spacing-3xl: 3rem;
 }
+
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+  main { padding: 1.25rem 1rem !important; }
+}
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr !important; }
+}

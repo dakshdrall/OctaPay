@@ -45,7 +45,7 @@ export default function Spend() {
 
         <section className="mt-8 grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-900 p-6 shadow-lg">
+            <div className="rounded-2xl bg-gradient-to-br from-[hsl(180,30%,10%)] via-[hsl(220,15%,10%)] to-[hsl(220,15%,12%)] p-6 shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold text-slate-300">Spendable balance</p>

@@ -140,7 +140,7 @@ export default function Borrow() {
                     min="0"
                     step="0.01"
                     placeholder="0"
-                    className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-[var(--accent)] focus:outline-none"
                   />
                 </label>
                 <div>
@@ -234,7 +234,7 @@ export default function Borrow() {
 
         {repayLoanId && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4">
-            <div className="w-full max-w-md rounded-2xl bg-white p-6 text-slate-900 shadow-xl">
+            <div className="w-full max-w-md rounded-2xl bg-[var(--surface-2)] p-6 text-white">
               <h2 className="text-xl font-semibold">Repay loan</h2>
               <p className="mt-1 text-sm text-slate-600">
                 Enter the amount you want to repay. Remaining balance will stay as outstanding loan.
@@ -248,7 +248,7 @@ export default function Borrow() {
                   type="number"
                   min="0"
                   step="0.01"
-                  className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-indigo-500 focus:outline-none"
+                  className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-[var(--accent)] focus:outline-none"
                 />
               </label>
 
@@ -264,7 +264,7 @@ export default function Borrow() {
                 </button>
                 <button
                   onClick={closeRepay}
-                  className="flex-1 rounded-lg bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200"
+                  className="flex-1 rounded-lg bg-[hsl(220,12%,22%)] px-5 py-3 text-sm font-semibold text-white hover:bg-[hsl(220,12%,28%)]"
                 >
                   Cancel
                 </button>
