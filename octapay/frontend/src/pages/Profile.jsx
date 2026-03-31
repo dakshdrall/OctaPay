@@ -105,8 +105,7 @@ export default function Profile() {
       borderRadius: 'var(--radius-lg)',
       padding: 'var(--spacing-xl)',
       animation: 'fadeInUp 600ms ease-out forwards',
-      opacity: 0,
-    },
+      },
     cardTitle: {
       fontSize: '1.125rem',
       fontFamily: 'var(--font-display)',
