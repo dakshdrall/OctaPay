@@ -72,3 +72,11 @@ cd octapay/frontend
 npm install
 npm run dev
 ```
+
+## 👤 Builder Info
+
+- **Name:** Daksh Drall
+- **GitHub:** [@dakshdrall](https://github.com/dakshdrall)
+- **Program:** Stellar Journey to Mastery – Monthly Builder Challenges
+- **Belt Level:** Blue Belt (Level 5)
+- **Project:** OctaPay
