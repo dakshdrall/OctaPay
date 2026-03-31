@@ -8,7 +8,7 @@ A decentralized finance platform built on the Stellar blockchain enabling users 
 - Health Check: https://octapay.onrender.com/health
 
 ## Demo Video
-🎥 [Watch Demo Video](#) *(add your Loom/YouTube link here after recording)*
+🎥 [Watch Demo Video](https://www.loom.com/share/da6e99053abc4c898fac0084eaf85f6b)
 
 ## Tech Stack
 - **Frontend:** React + Vite (deployed on Vercel)
