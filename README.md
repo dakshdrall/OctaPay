@@ -90,3 +90,17 @@ npm run dev
 - **Program:** Stellar Journey to Mastery – Monthly Builder Challenges
 - **Belt Level:** Blue Belt (Level 5)
 - **Project:** OctaPay
+
+## ⚡ Advanced Feature: Fee Sponsorship (Gasless Transactions)
+
+OctaPay implements **Stellar Fee Bump Transactions** so users never need XLM to pay network fees.
+
+### How it works:
+- A dedicated sponsor wallet (`GCGKABB3RN7NRX4CVM6EFDBXH4FSD33NKBCWF45VR2B2QNVWCILQMRIQ`) covers all transaction fees
+- User signs the inner transaction with their own key
+- Sponsor wraps it in a Fee Bump transaction and pays the 0.00002 XLM fee
+- Users can send XLM and USDC with zero balance required for fees
+
+### Implementation:
+- `octapay/backend/src/stellar/transactions.js` — `wrapWithFeeBump()` function
+- All `/api/wallet/send-xlm` and `/api/wallet/send` calls are now gasless
