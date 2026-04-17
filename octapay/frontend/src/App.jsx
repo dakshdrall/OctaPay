@@ -10,6 +10,7 @@ import Spend from './pages/Spend'
 import Profile from './pages/Profile'
 import Transactions from './pages/Transactions'
 import Explorer from './pages/Explorer'
+import Metrics from './pages/Metrics'
 
 function RequireAuth({ children }) {
   const { user, loading } = useAuth()
@@ -41,6 +42,7 @@ function AppContent() {
           <Route path="/invest" element={<RequireAuth><Invest /></RequireAuth>} />
           <Route path="/borrow" element={<RequireAuth><Borrow /></RequireAuth>} />
           <Route path="/spend" element={<RequireAuth><Spend /></RequireAuth>} />
+          <Route path="/metrics" element={<Metrics />} />
           <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
           <Route path="/transactions" element={<RequireAuth><Transactions /></RequireAuth>} />
           <Route path="/explorer" element={<RequireAuth><Explorer /></RequireAuth>} />
