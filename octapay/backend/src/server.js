@@ -7,6 +7,7 @@ import walletRoutes from './routes/wallet.js'
 import investRoutes from './routes/invest.js'
 import borrowRoutes from './routes/borrow.js'
 import transactionRoutes from './routes/transactions.js'
+import metricsRoutes from './routes/metrics.js'
 import { errorHandler } from './middleware/errorHandler.js'
 
 dotenv.config()
@@ -26,6 +27,7 @@ app.use('/api/wallet', walletRoutes)
 app.use('/api/invest', investRoutes)
 app.use('/api/borrow', borrowRoutes)
 app.use('/api/transactions', transactionRoutes)
+app.use('/api/metrics', metricsRoutes)
 
 app.use(errorHandler)
 
