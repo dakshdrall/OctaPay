@@ -42,7 +42,7 @@ export const register = async (req, res, next) => {
 
     // Stellar ops OUTSIDE transaction (takes 5+ seconds)
     const { publicKey, secretKey } = await createWallet()
-    await fundTestnetAccount(publicKey)
+    try { await fundTestnetAccount(publicKey) } catch(e) { console.log("Friendbot failed:", e.message) }
     const encryptedSecret = encryptText(secretKey)
 
     // Save wallet separately
