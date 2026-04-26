@@ -104,3 +104,25 @@ OctaPay implements **Stellar Fee Bump Transactions** so users never need XLM to 
 ### Implementation:
 - `octapay/backend/src/stellar/transactions.js` — `wrapWithFeeBump()` function
 - All `/api/wallet/send-xlm` and `/api/wallet/send` calls are now gasless
+
+## 🚀 Level 6 - Production Readiness
+
+### 🐦 Community Contribution
+[Tweet about OctaPay](https://x.com/dralldaksh/status/2045197976457347561)
+
+### 📊 Metrics Dashboard
+- Live at: https://octa-pay-frontend.vercel.app/metrics
+- API endpoint: https://octapay.onrender.com/api/metrics
+
+### 🔍 Monitoring
+- Tool: UptimeRobot (2 monitors, 100% uptime)
+- Backend: https://octapay.onrender.com/health ✅
+- Frontend: https://octa-pay-frontend.vercel.app ✅
+
+### 🔒 Security Checklist
+- [x] Environment variables stored in .env (not committed)
+- [x] Secrets encrypted in database (encryptedSecretKey)
+- [x] Auth middleware on all protected routes
+- [x] CORS enabled
+- [x] Input validation on all API endpoints
+- [x] HTTPS enforced on all deployments
