@@ -71,3 +71,12 @@ export const sendUSDC = async ({ sourceSecret, destinationPublic, amount }) => {
   innerTx.sign(sourceKeypair);
   return wrapWithFeeBump(innerTx);
 };
+
+export const getAccountTransactions = async (publicKey, limit = 10) => {
+  const txs = await server.transactions()
+    .forAccount(publicKey)
+    .limit(limit)
+    .order('desc')
+    .call()
+  return txs.records
+}
