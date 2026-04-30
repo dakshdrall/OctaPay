@@ -53,7 +53,7 @@ A decentralized finance platform built on the Stellar blockchain enabling users 
 Based on feedback from our 5 testnet users, here are the planned improvements:
 
 1. **Mobile App** - Users requested a mobile version with QR code wallet scanning
-   - Commit: Will be implemented in next phase
+   - Commit: [18fca86](https://github.com/dakshdrall/OctaPay/commit/18fca86) - mobile responsive dashboard
 
 2. **Push Notifications** - Real-time transaction alerts requested by Priya Nair
    - Plan: Integrate WebSockets for live transaction notifications
@@ -88,7 +88,7 @@ npm run dev
 - **Name:** Daksh Drall
 - **GitHub:** [@dakshdrall](https://github.com/dakshdrall)
 - **Program:** Stellar Journey to Mastery – Monthly Builder Challenges
-- **Belt Level:** Blue Belt (Level 5)
+- **Belt Level:** Black Belt (Level 6)
 - **Project:** OctaPay
 
 ## ⚡ Advanced Feature: Fee Sponsorship (Gasless Transactions)
@@ -161,3 +161,12 @@ OctaPay implements **Stellar Fee Bump Transactions** so users never need XLM to 
 | Prachi Saxena | prachi.saxena91@hotmail.com | GDQQ4LDVN7WOZHI7NUZNYDLPGZDQJSZMJICACV5UA6LBOMTSRSOFS5VM |
 | Yash Pandey | yash.pandey93@gmail.com | GCMWUDBAYSYVCEPSTQKZM4UPIWN6NXHTBRLP3XZMYQSONTMHPI2E4NRB |
 | Nisha Choudhary | nisha.choudhary89@outlook.com | GB542WSER5P7SNXHU3AO6NN6VXPHPVICXBOGE3IJAHYJ67K5H55XKUYN |
+
+## 🗄️ Data Indexing
+OctaPay indexes all on-chain transactions via Stellar Horizon API and stores them in Supabase PostgreSQL.
+- Approach: Each send/receive operation is indexed by userId, txHash, type, amount, status
+- Endpoint: https://octapay.onrender.com/api/transactions
+- Metrics endpoint: https://octapay.onrender.com/api/metrics
+
+## 📋 User Feedback Excel Sheet
+[View/Download Excel Sheet](https://docs.google.com/spreadsheets/d/15hC9Vq3HESBAaOfaW-AT5L-D3nrgd0xoQtnjWt2Lm2s/edit?usp=sharing)
