@@ -169,4 +169,4 @@ OctaPay indexes all on-chain transactions via Stellar Horizon API and stores the
 - Metrics endpoint: https://octapay.onrender.com/api/metrics
 
 ## 📋 User Feedback Excel Sheet
-[View/Download Excel Sheet](https://docs.google.com/spreadsheets/d/15hC9Vq3HESBAaOfaW-AT5L-D3nrgd0xoQtnjWt2Lm2s/edit?usp=sharing)
+[View Feedback Sheet](https://github.com/dakshdrall/OctaPay/blob/main/OctaPay_User_Feedback.csv)
