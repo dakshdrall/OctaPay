@@ -170,3 +170,9 @@ OctaPay indexes all on-chain transactions via Stellar Horizon API and stores the
 
 ## 📋 User Feedback Excel Sheet
 [View Feedback Sheet](https://github.com/dakshdrall/OctaPay/blob/main/OctaPay_User_Feedback.csv)
+
+## 🎤 Demo Day Presentation
+OctaPay is ready for Demo Day presentation.
+- Live demo: https://octa-pay-frontend.vercel.app
+- Demo video: https://www.loom.com/share/da6e99053abc4c898fac0084eaf85f6b
+- Key highlight: Gasless XLM transactions via fee bump sponsorship
