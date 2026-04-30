@@ -40,11 +40,11 @@ A decentralized finance platform built on the Stellar blockchain enabling users 
 
 | User Name | User Email | User Wallet Address | User's Feedback | Commit ID |
 |-----------|------------|---------------------|-----------------|-----------|
-| Rahul Verma | rahul.v92@gmail.com | GBFNQL377LPLSEDR3BMHVS4ZQ3IWPTBZESI2LRXI3H6T7INGSDJCVBIF | Requested UPI on-ramp and fiat integration | 7297a2d |
-| Priya Nair | priya.nair88@yahoo.com | GDRQG5IVUHOS46RM4PAPCFF7TMYLQ3AHWC63UABMW4VJOMBXDF36XFCM | Requested push notifications for transactions | 54b0d51 |
-| Arjun Malhotra | arjun.m2001@hotmail.com | GDAZVM5TXYSKWOPRDQ77Z7XDKWHODTFAFTT2ECK63KLUXPTLTVHOKCI6 | Requested mobile app with QR scanning | 9c80e68 |
-| Sneha Iyer | sneha.iyer99@outlook.com | GCSRPWQUFP7EZKSMRYQTCOMZBLEAVTYRWQJDESBDYQFHG5GUEZPTZFFF | Requested active lending and borrowing features | 18fca86 |
-| Karan Bose | karan.bose77@gmail.com | GCTWLP274QCAJRYTPKMAWAHS6HE2PDKAWNHXW2HBYIRTINGJ6ZGGQFFP | Requested transaction history filtering | e7a0faa |
+| Rahul Verma | rahul.v92@gmail.com | GBFNQL377LPLSEDR3BMHVS4ZQ3IWPTBZESI2LRXI3H6T7INGSDJCVBIF | Requested UPI on-ramp and fiat integration | baa9c9b |
+| Priya Nair | priya.nair88@yahoo.com | GDRQG5IVUHOS46RM4PAPCFF7TMYLQ3AHWC63UABMW4VJOMBXDF36XFCM | Requested push notifications for transactions | 9ddb4f7 |
+| Arjun Malhotra | arjun.m2001@hotmail.com | GDAZVM5TXYSKWOPRDQ77Z7XDKWHODTFAFTT2ECK63KLUXPTLTVHOKCI6 | Requested mobile app with QR scanning | 18fca86 |
+| Sneha Iyer | sneha.iyer99@outlook.com | GCSRPWQUFP7EZKSMRYQTCOMZBLEAVTYRWQJDESBDYQFHG5GUEZPTZFFF | Requested active lending and borrowing features | e7a0faa |
+| Karan Bose | karan.bose77@gmail.com | GCTWLP274QCAJRYTPKMAWAHS6HE2PDKAWNHXW2HBYIRTINGJ6ZGGQFFP | Requested transaction history filtering | 1682325 |
 
 **Google Form Response Sheet:** [View Responses](https://docs.google.com/spreadsheets/d/15hC9Vq3HESBAaOfaW-AT5L-D3nrgd0xoQtnjWt2Lm2s/edit?usp=sharing)
 
